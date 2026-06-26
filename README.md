@@ -5,8 +5,8 @@ analysis.
 
 ## Features
 
--   Peak Picker (.chi) -- BL40B2
--   Peak Picker (.dat) -- BL19B2
+-   Peak Picker (.chi) --- BL40B2
+-   Peak Picker (.dat) --- BL19B2
 -   Columnar Oblique Indexing
 -   Columnar Rectangular Indexing
 -   TIF Viewer
@@ -17,7 +17,12 @@ analysis.
 ## Requirements
 
 -   macOS (Apple Silicon recommended)
--   Python is **not required** when using the distributed application.
+-   Python 3.10 or later
+-   Required Python packages:
+
+``` bash
+pip install numpy pandas matplotlib scipy pillow pyperclip
+```
 
 ------------------------------------------------------------------------
 
@@ -28,7 +33,18 @@ analysis.
 2.  Unzip the downloaded file if necessary.
 3.  Drag **XRD Tools.app** to your Applications folder or any preferred
     location.
-4.  Double-click **XRD Tools.app** to launch.
+
+------------------------------------------------------------------------
+
+## First-time Setup
+
+Before using XRD Tools, install the required Python packages:
+
+``` bash
+pip install numpy pandas matplotlib scipy pillow pyperclip
+```
+
+Then launch **XRD Tools.app**.
 
 If macOS warns that the app is from an unidentified developer:
 
@@ -57,7 +73,7 @@ The current version is shown at the bottom of the launcher window.
 
 ## Contact
 
-Author: Yuto Maruyama
+**Author:** Yuto Maruyama
 
 If you encounter bugs or have suggestions for new features, please
 report them through the GitHub repository.
