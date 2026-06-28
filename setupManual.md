@@ -307,24 +307,6 @@ BASE_PYTHON="/usr/local/bin/python3"
 すでに別の場所にあるPython 3を使う場合は、
 その実体の完全なパスを指定します。
 
-例：
-
-```bash
-BASE_PYTHON="/Library/Frameworks/Python.framework/Versions/3.12/bin/python3"
-```
-
-または：
-
-```bash
-BASE_PYTHON="/opt/local/bin/python3"
-```
-
-または：
-
-```bash
-BASE_PYTHON="$HOME/miniconda3/bin/python3"
-```
-
 確認します。
 
 ```bash
