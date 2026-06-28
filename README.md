@@ -22,7 +22,7 @@ analysis.
 
 Before using XRD Tools, choose the setup guide that matches your environment:
 
-- [(setupManual.md)]
+- [here](setupManual.md)
 
 ------------------------------------------------------------------------
 
