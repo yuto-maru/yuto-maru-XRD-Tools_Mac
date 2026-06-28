@@ -20,7 +20,9 @@ analysis.
 -   Python 3.10 or later
 -   Required Python packages:
 
+Before using XRD Tools, choose the setup guide that matches your environment:
 
+- [(setupManual.md)]
 
 ------------------------------------------------------------------------
 
