@@ -323,11 +323,7 @@ Homebrew版Pythonへ直接pip installすると、
 「externally-managed-environment」と表示されることがあります。
 
 これを避け、ほかのPython環境へ影響を与えないため、
-XRD Tools専用の仮想環境を次の場所に作成します。
-
-```bash
-~/.xrd_tools_venv
-```
+XRD Tools専用の仮想環境（.xrd_tools_venv）を作成します。
 
 以前の専用環境を作り直す場合のみ、先に削除します。
 
