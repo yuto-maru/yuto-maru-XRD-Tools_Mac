@@ -412,6 +412,17 @@ XRD Toolsは、次の専用Pythonを自動検出します。
 ~/.xrd_tools_venv/bin/python3
 ```
 
+別のPython（例えば古いバージョン3.9など）で開けてしまう場合、
+過去に開いたことのあるPython3で開ける仕様になっているため、
+次を実行します。
+
+```bash
+rm ~/ .xrd_tools_launcher_settings.json
+```
+
+再度開け直すと、優先順位の高いPython3を探し直してくれる。
+
+
 ## 12. Python 3の選択画面が表示された場合
 
 XRD ToolsがPythonを自動検出できなかった場合は、
