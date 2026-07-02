@@ -151,7 +151,6 @@ Homebrew版Pythonの場所とバージョンを確認します。
 
 ```bash
 BREW_PYTHON="$(brew --prefix)/bin/python3"
-"$BREW_PYTHON" --version
 ```
 
 Python本体の実際の場所も確認できます。
