@@ -416,7 +416,7 @@ XRD Toolsは、次の専用Pythonを自動検出します。
 次を実行します。
 
 ```bash
-rm ~/ .xrd_tools_launcher_settings.json
+rm ~/.xrd_tools_launcher_settings.json
 ```
 
 再度開け直すと、優先順位の高いPython3を探し直してくれる。
