@@ -142,17 +142,133 @@ XRD Tools用として扱いやすい方法です。
 
 ## 7. Homebrew版Pythonを使用する場合
 
-すでにHomebrewを使用している場合は、Homebrew版Pythonも利用できます。
+Homebrew版PythonもXRD Toolsで利用できます。
 
-Pythonをインストールする場合：
+Homebrewをまだインストールしていない場合は、以下の手順で導入できます。
+
+### 7-1. ターミナルを開く
+
+Finderで次の順に開きます。
+
+```text
+アプリケーション
+→ ユーティリティ
+→ ターミナル
+```
+
+### 7-2. Xcode Command Line Toolsを確認する
+
+Homebrewを使用するには、Xcode Command Line Toolsが必要です。
+容量の大きいXcode本体をインストールする必要はありません。
+
+次のコマンドを実行します。
 
 ```bash
+xcode-select -p
+```
+
+次のように表示されれば、すでに使用できます。
+
+```bash
+/Library/Developer/CommandLineTools
+```
+
+`no developer tools` などのエラーが表示された場合は、
+次を実行します。
+
+```bash
+xcode-select --install
+```
+
+確認画面が表示されたら「インストール」を選び、
+完了するまで待ってください。
+
+インストール完了後、ターミナルを開き直して確認します。
+
+```bash
+xcode-select -p
+```
+
+まだ正しい場所が表示されない場合は、次を実行します。
+
+```bash
+sudo xcode-select --reset
+sudo xcode-select --switch /Library/Developer/CommandLineTools
+```
+
+再度確認します。
+
+```bash
+xcode-select -p
+```
+
+### 7-3. Homebrewが入っているか確認する
+
+次を実行します。
+
+```bash
+brew --version
+```
+
+`Homebrew 〇.〇.〇` のように表示された場合は、
+すでにHomebrewを使用できます。
+
+`command not found: brew` と表示された場合は、
+次のコマンドでHomebrewをインストールします。
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+途中でMacのログインパスワードを求められる場合があります。
+パスワードを入力しても画面には文字や記号が表示されません。
+そのまま入力してReturnキーを押してください。
+
+インストール終了時に `Next steps` としてコマンドが表示された場合は、
+画面に表示されたコマンドを必ず実行してください。
+
+Apple Silicon（M1、M2、M3、M4など）では、
+通常Homebrewは次の場所にインストールされます。
+
+```bash
+/opt/homebrew
+```
+
+Intel Macでは、通常次の場所にインストールされます。
+
+```bash
+/usr/local
+```
+
+ターミナルを開き直して、次を確認します。
+
+```bash
+brew --version
+```
+
+### 7-4. Python 3をインストールする
+
+HomebrewからPython 3をインストールする場合は、次を実行します。
+
+```bash
+brew update
 brew install python
 ```
 
-HomebrewではPythonとtkinterが別パッケージになっている場合があります。
+すでにインストール済みの場合は、
+`already installed` などと表示されることがありますが問題ありません。
 
 Pythonのバージョンを確認します。
+
+```bash
+python3 --version
+```
+
+### 7-5. tkinterをインストール・確認する
+
+HomebrewではPython本体とtkinterが別パッケージになっている場合があります。
+
+Pythonのメジャー・マイナーバージョンを取得します。
 
 ```bash
 PYVER="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
@@ -165,7 +281,13 @@ echo "$PYVER"
 brew install "python-tk@$PYVER"
 ```
 
-tkinterを確認する場合：
+すでにインストール済みで、修復したい場合は次を実行します。
+
+```bash
+brew reinstall "python-tk@$PYVER"
+```
+
+tkinterを確認します。
 
 ```bash
 python3 -m tkinter
@@ -173,8 +295,8 @@ python3 -m tkinter
 
 小さなテストウィンドウが開けば使用できます。
 
-この確認後は、専用環境を手動で作成する必要はありません。
-XRD Tools.appを起動すれば、XRD Toolsが自動で専用環境を準備します。
+この確認後は、XRD Tools専用環境を手動で作成する必要はありません。
+XRD Tools.appを起動すれば、XRD Toolsが専用環境と必要なライブラリを自動で準備します。
 
 ---
 
