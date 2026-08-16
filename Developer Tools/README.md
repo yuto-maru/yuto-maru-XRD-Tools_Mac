@@ -27,7 +27,379 @@ macOS版 XRD Toolsは、py2appを使用しない軽量 `.app` 方式で構成す
 
 ---
 
-## 2. 解析ツール
+
+## 2. 初心者開発者向け：技術継承後に最初に行うこと
+
+この節は、XRD Toolsの開発を初めて引き継ぐ開発者向けの手順である。
+
+最初からコード全体を理解する必要はない。  
+まずは**既存版を壊さずに起動・ビルド・テストできる状態を再現すること**を優先する。
+
+### Step 1. 開発用フォルダを複製する
+
+配布中または動作確認済みの開発フォルダを、そのままバックアップする。
+
+例：
+
+```text
+XRD_Tools_macOS_stable/
+XRD_Tools_macOS_development/
+```
+
+新しい修正は `development` 側で行い、動作確認済みの `stable` 側は変更しない。
+
+特に、既存ツールへ新機能を追加する場合も、可能であれば元ファイルを残し、新しいファイルとして試作する。
+
+---
+
+### Step 2. フォルダ構成を確認する
+
+最低限、以下が存在することを確認する。
+
+```text
+launcher.py
+version.py
+requirements.txt
+setup.command
+build.command
+make_release_zip.command
+tools/
+```
+
+`tools/` 内には、ランチャーから呼び出す解析ツールが入っている。
+
+最初にファイル名と役割を対応付けておく。
+
+```text
+peak_picker_chi.py          → Peak Picker (.chi)
+peak_picker_dat.py          → Peak Picker (.dat)
+peak_Colob.py               → Col Oblique Indexing
+peak_Colr.py                → Col Rectangular Indexing
+Colr_lattice_editor.py      → Colr Lattice Editor
+interactive_viewer.py       → TIF Viewer
+excel_to_word_table.py      → Excel → Word Table
+```
+
+---
+
+### Step 3. まず既存版をビルドする
+
+コードを変更する前に、現在のソースから正常に `.app` を作成できることを確認する。
+
+```bash
+/bin/bash build.command
+```
+
+正常なら、以下が生成される。
+
+```text
+dist/XRD Tools.app
+XRD_Tools_v<version>.zip
+```
+
+この段階でビルドできない場合は、新機能開発を始めず、まずビルド環境を復旧する。
+
+---
+
+### Step 4. ビルドしたアプリを起動する
+
+`dist/XRD Tools.app` を起動し、ランチャーが表示されることを確認する。
+
+最低限、以下を確認する。
+
+1. XRD Toolsランチャーが開く
+2. 7つのツールカードが表示される
+3. 各カードをクリックできる
+4. Peak Pickerではsample/reference選択画面が開く
+5. 各解析ツールが起動する
+6. ツール終了後もランチャーが使用できる
+
+---
+
+### Step 5. 専用Python環境の考え方を理解する
+
+XRD Toolsは、開発フォルダ内のPythonではなく、利用者ごとに作成される
+
+```text
+~/.xrd_tools_venv
+```
+
+を実行環境として使用する。
+
+重要なのは、
+
+```text
+XRD Tools.app
+        ↓
+setup.command
+        ↓
+~/.xrd_tools_venv
+        ↓
+launcher.py
+        ↓
+各tools/*.py
+```
+
+という流れである。
+
+解析ツールを修正するときに、システムPythonへ直接 `pip install` する必要はない。
+
+---
+
+### Step 6. 変更するファイルを限定する
+
+初心者のうちは、目的に応じて触るファイルを限定する。
+
+#### 解析処理を変更する場合
+
+```text
+tools/<対象ツール>.py
+```
+
+を変更する。
+
+#### ランチャーの表示やボタンを変更する場合
+
+```text
+launcher.py
+```
+
+を変更する。
+
+#### 必要ライブラリを追加する場合
+
+```text
+requirements.txt
+setup.command
+```
+
+を確認する。
+
+#### Versionを更新する場合
+
+```text
+version.py
+```
+
+のみを変更する。
+
+#### ビルド方法を変更する場合
+
+```text
+build.command
+make_release_zip.command
+```
+
+を変更する。
+
+ビルドスクリプトはアプリ全体へ影響するため、解析ツールの修正より慎重に扱う。
+
+---
+
+### Step 7. 小さな変更ごとに単体確認する
+
+複数の変更をまとめて行わない。
+
+推奨：
+
+```text
+1機能修正
+↓
+直接Pythonで確認
+↓
+launcher経由で確認
+↓
+build
+↓
+.appで確認
+```
+
+問題が起きたときに、どの変更が原因か分かるようにする。
+
+---
+
+### Step 8. ツール単体を確認する
+
+解析ツールの修正時は、可能であればツール単体でも起動確認する。
+
+ただし、正式な動作確認では必ずXRD Tools専用環境を使用する。
+
+例：
+
+```bash
+"$HOME/.xrd_tools_venv/bin/python3" tools/対象ツール.py
+```
+
+Peak Pickerなど、ランチャーから引数を受け取るツールは、最終的にはランチャー経由で確認する。
+
+---
+
+### Step 9. launcher経由で確認する
+
+単体で動いても、ランチャーから起動できるとは限らない。
+
+必ず
+
+```text
+XRD Tools.app
+→ 対象カード
+→ 対象ツール
+```
+
+の経路でも確認する。
+
+特に確認するもの：
+
+- ファイル選択
+- 作業ディレクトリ
+- コマンドライン引数
+- ログ出力
+- tkinterウィンドウ表示
+- Matplotlib表示
+- クリップボード機能
+
+---
+
+### Step 10. エラーが出たらログを見る
+
+「動かない」ときにコードをすぐ書き換えず、まずログを確認する。
+
+```text
+~/Library/Logs/XRD Tools.log
+~/Library/Logs/XRD Tools Setup.log
+~/Library/Logs/XRD Tools Tools.log
+```
+
+解析ツールのエラーは、まず
+
+```text
+XRD Tools Tools.log
+```
+
+を確認する。
+
+---
+
+### Step 11. requirementsを変更した場合
+
+新しいPythonライブラリを使う場合は、
+
+```text
+requirements.txt
+```
+
+へ追加する。
+
+さらに、`setup.command` のruntime確認でも、そのライブラリをimportできるか確認する。
+
+その後、
+
+1. 既存venvがある状態
+2. 新規venvの状態
+
+の両方でテストする。
+
+---
+
+### Step 12. 新しいツールを追加する場合
+
+既存ツールを無理に上書きせず、新しい `.py` ファイルとして追加する。
+
+手順：
+
+```text
+1. tools/ に新規.pyを追加
+2. 専用venvで単体起動確認
+3. launcher.py にカードまたは起動処理を追加
+4. launcher経由で起動確認
+5. build.commandで.app作成
+6. .appから最終確認
+```
+
+---
+
+### Step 13. TIF Viewerの方針を守る
+
+TIF Viewerは現在、簡易2D Viewerとして扱う。
+
+Fit2Dの完全互換が確認されていない積分機能を、検証なしで正式機能へ追加しない。
+
+論文に使用する定量処理は、再現性・一致性を検証してから採用する。
+
+---
+
+### Step 14. 配布前に必ずクリーンビルドする
+
+開発途中の `.app` をそのまま配布しない。
+
+```bash
+/bin/bash build.command
+```
+
+で新しく生成したものを使用する。
+
+配布対象：
+
+```text
+XRD_Tools_v<version>.zip
+```
+
+ZIP内は原則として
+
+```text
+XRD Tools.app
+```
+
+のみとする。
+
+---
+
+### Step 15. 変更内容を記録する
+
+技術継承のため、変更時には最低限以下を記録する。
+
+```text
+・変更日
+・変更したファイル
+・変更内容
+・変更理由
+・動作確認した環境
+・既知の問題
+```
+
+可能であればGit等のバージョン管理を使用する。
+
+---
+
+### Step 16. 問題が起きた場合の切り分け順
+
+初心者開発者は、以下の順で確認すると原因を絞りやすい。
+
+```text
+1. 元のstable版は動くか
+2. 変更した.py単体は動くか
+3. 専用venvで動くか
+4. launcherから動くか
+5. build後の.appで動くか
+6. 別Macでも動くか
+```
+
+この順で確認すると、
+
+```text
+解析コードの問題
+ランチャーの問題
+Python環境の問題
+ビルドの問題
+Mac固有の問題
+```
+
+を切り分けやすい。
+
+---
+
+## 3. 解析ツール
+
 
 ランチャーから起動する主なツール：
 
@@ -49,7 +421,7 @@ Fit2Dとの完全一致が保証されない積分処理は、正式機能とし
 
 ---
 
-## 3. 推奨ソース構成
+## 4. 推奨ソース構成
 
 ```text
 XRD_Tools_macOS/
@@ -72,7 +444,7 @@ XRD_Tools_macOS/
 
 ---
 
-## 4. version.py
+## 5. version.py
 
 バージョン番号および作者名は `version.py` で管理する。
 
@@ -89,7 +461,7 @@ AUTHOR = "Yuto Maruyama"
 
 ---
 
-## 5. requirements.txt
+## 6. requirements.txt
 
 XRD Tools専用環境へ導入するPythonライブラリを管理する。
 
@@ -120,7 +492,7 @@ venv
 
 ---
 
-## 6. `.app` の構造
+## 7. `.app` の構造
 
 ビルド後の概略構造：
 
@@ -143,7 +515,7 @@ XRD Tools.app/
 
 ---
 
-## 7. 初回起動の流れ
+## 8. 初回起動の流れ
 
 `XRD Tools.app` 起動時に以下を確認する。
 
@@ -157,7 +529,7 @@ XRD Tools.app/
 
 ---
 
-## 8. Apple Silicon / Intel Mac
+## 9. Apple Silicon / Intel Mac
 
 macOS版は以下の両方に対応する。
 
@@ -192,7 +564,7 @@ Intel Mac     → x86_64
 
 ---
 
-## 9. ベースPythonの探索
+## 10. ベースPythonの探索
 
 `setup.command` は使用可能なPython 3を自動探索する。
 
@@ -224,7 +596,7 @@ Pythonのマイナーバージョンは固定しない。
 
 ---
 
-## 10. 専用Python環境
+## 11. 専用Python環境
 
 専用環境：
 
@@ -244,7 +616,7 @@ macOSのFramework Pythonでは、Tkinter起動後の `sys.executable` がvenv外
 
 ---
 
-## 11. 専用環境の管理ファイル
+## 12. 専用環境の管理ファイル
 
 専用環境内には、必要に応じて以下を保存する。
 
@@ -276,7 +648,7 @@ requirementsが変更された場合、次回起動時に再セットアップ�
 
 ---
 
-## 12. 専用環境の修復
+## 13. 専用環境の修復
 
 既存の専用環境が存在する場合は、まずライブラリおよびTkinterが正常に使用できるか確認する。
 
@@ -293,7 +665,7 @@ requirementsが変更された場合、次回起動時に再セットアップ�
 
 ---
 
-## 13. ログ
+## 14. ログ
 
 主なログ：
 
@@ -325,7 +697,7 @@ Matplotlib設定：
 
 ---
 
-## 14. ランチャーの表示設定
+## 15. ランチャーの表示設定
 
 MacごとのTk表示差を抑えるため、ランチャーは
 
@@ -351,7 +723,7 @@ Reference nominal size   -21 px
 
 ---
 
-## 15. Peak Pickerの起動
+## 16. Peak Pickerの起動
 
 Peak Picker (.chi) / (.dat) はランチャー側で以下の順にファイル選択を行う。
 
@@ -368,7 +740,7 @@ Peak Picker (.chi) / (.dat) はランチャー側で以下の順にファイル�
 
 ---
 
-## 16. build.command
+## 17. build.command
 
 `build.command` は軽量 `.app` を作成するための開発者用ビルドスクリプト。
 
@@ -395,7 +767,7 @@ pyi_runtime_hook.py
 
 ---
 
-## 17. ビルド方法
+## 18. ビルド方法
 
 必要に応じて実行権限を付ける。
 
@@ -415,7 +787,7 @@ chmod +x make_release_zip.command
 
 ---
 
-## 18. ビルド出力
+## 19. ビルド出力
 
 例：
 
@@ -443,7 +815,7 @@ tools/
 
 ---
 
-## 19. アイコン
+## 20. アイコン
 
 プロジェクトルートに
 
@@ -457,7 +829,7 @@ XRD.icns
 
 ---
 
-## 20. コード署名
+## 21. コード署名
 
 現在の軽量ビルドでは、利用可能な場合にad-hoc署名を行うことがある。
 
@@ -473,7 +845,7 @@ codesign --force --deep --sign -
 
 ---
 
-## 21. ツールを更新する場合
+## 22. ツールを更新する場合
 
 既存ツールを修正した場合：
 
@@ -487,7 +859,7 @@ tools/<対象ファイル>.py
 
 ---
 
-## 22. 新しいツールを追加する場合
+## 23. 新しいツールを追加する場合
 
 最低限以下を変更する。
 
@@ -499,7 +871,7 @@ tools/<対象ファイル>.py
 
 ---
 
-## 23. requirements変更時
+## 24. requirements変更時
 
 依存ライブラリを追加・変更する場合：
 
@@ -514,7 +886,7 @@ requirementsのハッシュが変わるため、既存ユーザーにも次回�
 
 ---
 
-## 24. Version更新時
+## 25. Version更新時
 
 `version.py` の
 
@@ -528,7 +900,7 @@ VERSION = "x.y"
 
 ---
 
-## 25. 配布前チェック
+## 26. 配布前チェック
 
 - [ ] Versionが正しい
 - [ ] 最新の解析ツールがすべて入っている
@@ -553,7 +925,7 @@ VERSION = "x.y"
 
 ---
 
-## 26. 開発時に維持する重要仕様
+## 27. 開発時に維持する重要仕様
 
 以下は現行設計の重要部分。
 
@@ -571,7 +943,7 @@ Mac間フォント補正
 
 ---
 
-## 27. 最終配布物
+## 28. 最終配布物
 
 利用者へ配布するもの：
 
