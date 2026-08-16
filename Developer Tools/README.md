@@ -28,12 +28,11 @@ macOS版 XRD Toolsは、py2appを使用しない軽量 `.app` 方式で構成す
 ---
 
 
-## 2. 初心者開発者向け：技術継承後に最初に行うこと
+## 2. 引き継ぎ時の作業手順
 
-この節は、XRD Toolsの開発を初めて引き継ぐ開発者向けの手順である。
+この節では、XRD Toolsの開発を引き継ぐ際の基本的な作業手順を示す。
 
-最初からコード全体を理解する必要はない。  
-まずは**既存版を壊さずに起動・ビルド・テストできる状態を再現すること**を優先する。
+まず、既存版をそのまま起動・ビルド・テストできる状態を再現し、その後に変更作業へ進む。
 
 ### Step 1. 開発用フォルダを複製する
 
@@ -71,13 +70,13 @@ tools/
 最初にファイル名と役割を対応付けておく。
 
 ```text
-peak_picker_chi.py          → Peak Picker (.chi)
-peak_picker_dat.py          → Peak Picker (.dat)
-peak_Colob.py               → Col Oblique Indexing
-peak_Colr.py                → Col Rectangular Indexing
-Colr_lattice_editor.py      → Colr Lattice Editor
-interactive_viewer.py       → TIF Viewer
-excel_to_word_table.py      → Excel → Word Table
+peak_picker_chi.py → Peak Picker (.chi)
+peak_picker_dat.py → Peak Picker (.dat)
+peak_Colob.py → Col Oblique Indexing
+peak_Colr.py → Col Rectangular Indexing
+Colr_lattice_editor.py → Colr Lattice Editor
+interactive_viewer.py → TIF Viewer
+excel_to_word_table.py → Excel → Word Table
 ```
 
 ---
@@ -130,13 +129,13 @@ XRD Toolsは、開発フォルダ内のPythonではなく、利用者ごとに�
 
 ```text
 XRD Tools.app
-        ↓
+ ↓
 setup.command
-        ↓
+ ↓
 ~/.xrd_tools_venv
-        ↓
+ ↓
 launcher.py
-        ↓
+ ↓
 各tools/*.py
 ```
 
@@ -148,7 +147,7 @@ launcher.py
 
 ### Step 6. 変更するファイルを限定する
 
-初心者のうちは、目的に応じて触るファイルを限定する。
+目的に応じて、変更するファイルを限定する。
 
 #### 解析処理を変更する場合
 
@@ -356,7 +355,7 @@ XRD Tools.app
 
 ### Step 15. 変更内容を記録する
 
-技術継承のため、変更時には最低限以下を記録する。
+引き継ぎや履歴確認のため、変更時には最低限以下を記録する。
 
 ```text
 ・変更日
@@ -373,7 +372,7 @@ XRD Tools.app
 
 ### Step 16. 問題が起きた場合の切り分け順
 
-初心者開発者は、以下の順で確認すると原因を絞りやすい。
+問題が発生した場合は、以下の順で確認すると原因を絞りやすい。
 
 ```text
 1. 元のstable版は動くか
@@ -431,15 +430,15 @@ XRD_Tools_macOS/
 ├── setup.command
 ├── build.command
 ├── make_release_zip.command
-├── XRD.icns                  # 任意
+├── XRD.icns # 任意
 └── tools/
-    ├── peak_picker_chi.py
-    ├── peak_picker_dat.py
-    ├── peak_Colob.py
-    ├── peak_Colr.py
-    ├── Colr_lattice_editor.py
-    ├── interactive_viewer.py
-    └── excel_to_word_table.py
+ ├── peak_picker_chi.py
+ ├── peak_picker_dat.py
+ ├── peak_Colob.py
+ ├── peak_Colr.py
+ ├── Colr_lattice_editor.py
+ ├── interactive_viewer.py
+ └── excel_to_word_table.py
 ```
 
 ---
@@ -499,16 +498,16 @@ venv
 ```text
 XRD Tools.app/
 └── Contents/
-    ├── Info.plist
-    ├── MacOS/
-    │   └── XRD Tools
-    └── Resources/
-        ├── launcher.py
-        ├── version.py
-        ├── setup.command
-        ├── requirements.txt
-        ├── XRD.icns
-        └── tools/
+ ├── Info.plist
+ ├── MacOS/
+ │ └── XRD Tools
+ └── Resources/
+ ├── launcher.py
+ ├── version.py
+ ├── setup.command
+ ├── requirements.txt
+ ├── XRD.icns
+ └── tools/
 ```
 
 アプリ内部には、専用環境を作成するためのファイルと各解析ツールを収録する。
@@ -535,7 +534,7 @@ macOS版は以下の両方に対応する。
 
 ```text
 Apple Silicon → arm64
-Intel Mac     → x86_64
+Intel Mac → x86_64
 ```
 
 アーキテクチャ判定：
@@ -712,11 +711,11 @@ root.tk.call("tk", "scaling", 1.0)
 基準：
 
 ```text
-Font                     Helvetica Bold
-Reference text           Peak Picker (.chi)
-Reference width          174 px
-Reference linespace      24 px
-Reference nominal size   -21 px
+Font Helvetica Bold
+Reference text Peak Picker (.chi)
+Reference width 174 px
+Reference linespace 24 px
+Reference nominal size -21 px
 ```
 
 `launcher.py` を更新する場合、この補正処理を誤って削除しないこと。
