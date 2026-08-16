@@ -3,461 +3,301 @@
 ## 1. はじめに
 
 XRD Toolsは、MacにインストールされているPython 3を利用して動作します。
-すでにPython 3がインストールされている場合は、手順8から行なってください。
 
-必要なもの
+初回起動時に、XRD Toolsが必要な専用Python環境を自動的に作成し、
+必要なPythonライブラリも自動でインストールします。
 
+そのため、利用者が次の作業を手動で行う必要はありません。
+
+- XRD Tools専用の仮想環境を作成する
+- `numpy`、`pandas`、`matplotlib`、`scipy` などを個別にインストールする
+- XRD Tools用のPythonパスを設定する
+- 専用環境のPythonを手動で選択する
+
+通常は、Python 3が使用できるMacで **XRD Tools.appをダブルクリックするだけ** でセットアップできます。
+
+---
+
+## 2. 利用に必要なもの
+
+必要なものは次のとおりです。
+
+- macOS
+- インターネット接続（初回セットアップ時）
 - Python 3
-- tkinter
+- tkinterが使用できるPython 3
+
+XRD Toolsで使用する次のライブラリは、初回セットアップ時に自動で専用環境へインストールされます。
+
 - numpy
 - pandas
 - matplotlib
 - scipy
 - pyperclip
 - Pillow
+- openpyxl
 
-Python 3の導入方法は、次のどちらかを選べます。
+すでに使用可能なPython 3とtkinterがインストールされている場合は、
+Pythonを追加でインストールする必要はありません。
 
-【方法A】HomebrewからPython 3とtkinterを入れる
-【方法B】python.org公式インストーラーからPython 3を入れる
+---
 
-すでに使用できるPython 3とtkinterが入っている場合は、
-新しいPythonを追加する必要はありません。
+## 3. XRD Toolsを起動する
 
-**注意：**
-別の方法でPython 3をすでにインストールしている状態で
-Homebrew版Pythonを入れると、複数のPythonが共存します。
-通常は問題ありませんが、XRD Tools用には
-「~/.xrd_tools_venv」に専用環境を作成し、
-そのPythonを使用することで混乱を防ぎます。
+1. 配布されたZIPファイルを展開します。
 
-## 2. ターミナルを開く
+2. 展開したフォルダ内の **XRD Tools.app** をダブルクリックします。
 
-Finderで次の順に開きます。
+3. 初回起動時、XRD Tools専用環境がまだ作成されていない場合は、
+   セットアップの案内が表示されます。
+
+4. 画面の案内に従ってセットアップを開始します。
+
+5. セットアップ処理では、XRD Toolsが自動的に使用可能なPython 3を確認し、
+   専用環境と必要なライブラリを準備します。
+
+6. セットアップ完了後、XRD Toolsを起動します。
+
+初回セットアップ中は、ターミナルのウィンドウが表示される場合があります。
+処理が完了するまでは、そのウィンドウを閉じないでください。
+
+---
+
+## 4. 初回セットアップで自動的に行われること
+
+XRD Toolsは初回セットアップ時に、主に次の処理を自動で行います。
+
+1. Mac内にある使用可能なPython 3を確認する
+2. Python 3でtkinterが使用できることを確認する
+3. XRD Tools専用環境を次の場所に作成する
 
 ```bash
-アプリケーション
-→ ユーティリティ
-→ ターミナル
+~/.xrd_tools_venv
 ```
 
-以下のコマンドは、ターミナルへ1行ずつコピーして実行してください。
+4. 専用環境へ必要なPythonライブラリをインストールする
+5. 専用環境が正常に使用できることを確認する
+6. 以後、XRD Tools本体と各解析ツールをこの専用Python環境で実行する
 
-## 方法A：HomebrewからPython 3とtkinterを入れる
+この専用環境はXRD Tools専用です。
+Mac全体のPython環境や、ほかのPythonプロジェクトには影響しません。
 
-## 3-A. Xcode Command Line Toolsを確認する
+### 利用者が手動で行う必要のない操作
 
-Homebrewを使うには、Xcode Command Line Toolsが必要です。
-容量の大きいXcode本体をインストールする必要はありません。
-
-次のコマンドを実行します。
+次のようなコマンドを利用者が実行する必要はありません。
 
 ```bash
-xcode-select -p
+python3 -m venv ~/.xrd_tools_venv
+pip install numpy
+pip install scipy
+pip install matplotlib
 ```
 
-次のように表示されれば、すでに使用できます。
+これらはXRD Toolsのセットアップ機能が自動的に処理します。
+
+---
+
+## 5. macOSの警告でXRD Toolsを開けない場合
+
+初回起動時、macOSのセキュリティ機能により
+XRD Tools.appをそのまま開けない場合があります。
+
+その場合は、次の手順を試してください。
+
+1. **XRD Tools.app** をControlキーを押しながらクリックします。
+2. メニューから **「開く」** を選択します。
+3. 確認画面が表示された場合は、もう一度 **「開く」** を選択します。
+
+一度許可すると、通常は次回以降ダブルクリックで起動できます。
+
+---
+
+## 6. Python 3が入っているか分からない場合
+
+まずXRD Tools.appを起動してください。
+
+使用可能なPython 3が見つかれば、XRD ToolsがそのPythonを利用して
+専用環境を自動作成します。
+
+Python 3が見つからない場合や、tkinterが使用できない場合のみ、
+Python 3をインストールしてください。
+
+### 推奨：python.org公式版Python
+
+最も簡単なのは、python.org公式版Pythonを使用する方法です。
+
+1. 次のページを開きます。
+
+<https://www.python.org/downloads/macos/>
+
+2. macOS用のPython 3インストーラー（`.pkg`）をダウンロードします。
+3. ダウンロードした`.pkg`をダブルクリックします。
+4. 画面の案内に従い、標準設定でインストールします。
+5. インストール完了後、もう一度XRD Tools.appを起動します。
+
+python.org公式版には通常tkinterが含まれているため、
+XRD Tools用として扱いやすい方法です。
+
+---
+
+## 7. Homebrew版Pythonを使用する場合
+
+すでにHomebrewを使用している場合は、Homebrew版Pythonも利用できます。
+
+Pythonをインストールする場合：
 
 ```bash
-/Library/Developer/CommandLineTools
-```
-
-「no developer tools」などのエラーが表示された場合は、
-次を実行します。
-
-```bash
-xcode-select --install
-```
-
-確認画面が表示されたら「インストール」を選び、
-完了するまで待ってください。
-
-インストール完了後、ターミナルを開き直して確認します。
-
-```bash
-xcode-select -p
-```
-
-まだ正しい場所が表示されない場合は、次を実行します。
-
-```bash
-sudo xcode-select --reset
-sudo xcode-select --switch /Library/Developer/CommandLineTools
-```
-
-再度確認します。
-
-```bash
-xcode-select -p
-```
-
-## 4-A. Homebrewが入っているか確認する
-
-次のコマンドを実行します。
-
-```bash
-brew --version
-```
-
-「Homebrew 〇.〇.〇」のように表示された場合は、
-「5-A. Python 3をインストールする」へ進んでください。
-
-「command not found: brew」と表示された場合は、
-次のコマンドでHomebrewをインストールします。
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-途中でMacのログインパスワードを求められる場合があります。
-パスワードを入力しても画面には文字や記号が表示されません。
-そのまま入力してReturnキーを押してください。
-
-インストール終了時に「Next steps」としてコマンドが表示された場合は、
-画面に表示されたコマンドを必ず実行してください。
-
-Apple Silicon（M1、M2、M3、M4など）では、
-通常Homebrewは次の場所に入ります。
-
-```bash
-/opt/homebrew
-```
-
-Intel Macでは、通常次の場所に入ります。
-
-```bash
-/usr/local
-```
-
-ターミナルを開き直して、次を確認します。
-
-```bash
-brew --version
-```
-
-## 5-A. Python 3をインストールする
-
-次を実行します。
-
-```bash
-brew update
 brew install python
 ```
 
-すでにインストール済みの場合は、
-「already installed」などと表示されることがありますが問題ありません。
+HomebrewではPythonとtkinterが別パッケージになっている場合があります。
 
-Homebrew版Pythonの場所とバージョンを確認します。
-
-```bash
-BREW_PYTHON="$(brew --prefix)/bin/python3"
-```
-
-Python本体の実際の場所も確認できます。
+Pythonのバージョンを確認します。
 
 ```bash
-"$BREW_PYTHON" -c "import sys; print(sys.executable)"
-```
-
-## 6-A. Homebrew版Python用のtkinterをインストールする
-
-Homebrewでは、Python本体とtkinterが別パッケージになっています。
-
-まず、Pythonのメジャー・マイナーバージョンを取得します。
-
-```bash
-PYVER="$("$BREW_PYTHON" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+PYVER="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
 echo "$PYVER"
 ```
 
-続いて、同じバージョンのtkinterをインストールします。
+対応するtkinterをインストールします。
 
 ```bash
 brew install "python-tk@$PYVER"
 ```
 
-すでに入っている場合や、修復したい場合は次を実行します。
+tkinterを確認する場合：
 
 ```bash
-brew reinstall "python-tk@$PYVER"
+python3 -m tkinter
 ```
 
-tkinterを確認します。
+小さなテストウィンドウが開けば使用できます。
+
+この確認後は、専用環境を手動で作成する必要はありません。
+XRD Tools.appを起動すれば、XRD Toolsが自動で専用環境を準備します。
+
+---
+
+## 8. 通常の起動
+
+初回セットアップが完了した後は、
+
+**XRD Tools.appをダブルクリックするだけ**
+
+で起動できます。
+
+XRD Toolsは、次の専用環境のPythonを使用します。
 
 ```bash
-"$BREW_PYTHON" -m tkinter
+~/.xrd_tools_venv/bin/python3
 ```
 
-小さなテストウィンドウが開けば正常です。
-確認後はウィンドウを閉じてください。
+Peak Picker、Indexing、TIF Viewerなどの各解析ツールも、
+同じXRD Tools専用Python環境から起動します。
 
-コマンドだけで確認する場合：
+---
+
+## 9. XRD Toolsを更新する場合
+
+新しいバージョンのXRD Toolsを入手した場合は、
+基本的にXRD Tools.appを新しいものへ置き換えるだけです。
+
+XRD Tools専用環境
 
 ```bash
-"$BREW_PYTHON" -c "import tkinter; print('tkinter OK:', tkinter.TkVersion)"
+~/.xrd_tools_venv
 ```
 
-正常なら、「7. XRD Tools専用環境を作る」へ進んでください。
+はユーザーのホームフォルダに保存されているため、
+通常はXRD Tools.appを置き換えてもそのまま保持されます。
 
-## 方法B：python.org公式版Python 3を入れる
+新しいバージョンでライブラリ構成の変更などが必要になった場合は、
+XRD Tools側から再セットアップが案内される場合があります。
+その場合は画面の案内に従ってください。
 
-## 3-B. Python 3をインストールする
+---
 
-1. Webブラウザで次のページを開きます。
+## 10. セットアップに失敗する場合
+
+### 10-1. Pythonが見つからない
+
+python.org公式版Python 3をインストールしてから、
+もう一度XRD Tools.appを起動してください。
 
 <https://www.python.org/downloads/macos/>
 
-2. macOS用の.pkgインストーラーをダウンロードします。
+### 10-2. tkinterが使用できない
 
-3. ダウンロードした.pkgファイルをダブルクリックします。
+python.org公式版Pythonを使用している場合は、
+Pythonを公式インストーラーから再インストールしてください。
 
-4. 画面の案内に従い、標準設定のままインストールします。
+Homebrew版Pythonを使用している場合は、
+使用中のPythonと同じバージョンの`python-tk`を確認してください。
 
-5. 「アプリケーション」フォルダ内に作成された
-```bash
-「Python 3.x」フォルダを開きます。
-```
-
-6. 「Install Certificates.command」がある場合は、
-```bash
-ダブルクリックして実行します。
-```
-
-python.org公式版のPython本体は、通常、次のような場所にあります。
+例：
 
 ```bash
-/Library/Frameworks/Python.framework/Versions/3.x/bin/python3
+PYVER="$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')"
+brew install "python-tk@$PYVER"
 ```
 
-また、通常は次のリンクが作られます。
+### 10-3. セットアップ途中でエラーになった
+
+まずXRD Tools.appを終了し、もう一度起動してセットアップを実行してください。
+
+専用環境の削除や再作成は通常必要ありません。
+
+繰り返し失敗する場合に限り、開発者から案内された手順に従って
+専用環境を再作成してください。
+
+---
+
+## 11. XRD Tools専用環境について
+
+XRD Toolsは次のフォルダを専用Python環境として使用します。
 
 ```bash
-/usr/local/bin/python3
+~/.xrd_tools_venv
 ```
 
-## 4-B. python.org公式版Pythonを確認する
+この環境はXRD Tools専用であり、
 
-次を実行します。
+- macOSのシステムPython
+- HomebrewのPython
+- python.org公式版Python
+- ほかのPython仮想環境
+
+を直接変更するものではありません。
+
+通常の利用では、このフォルダを手動で操作する必要はありません。
+
+---
+
+## 12. アンインストール
+
+XRD Tools本体を削除する場合は、
+**XRD Tools.app** を削除します。
+
+XRD Tools専用Python環境も完全に削除したい場合のみ、
+次のフォルダを削除します。
 
 ```bash
-/usr/local/bin/python3 --version
+~/.xrd_tools_venv
 ```
 
-Pythonの実体を確認します。
+XRD Toolsのランチャー設定も削除する場合は、
+次のファイルを削除します。
 
 ```bash
-/usr/local/bin/python3 -c "import sys; print(sys.executable)"
+~/.xrd_tools_launcher_settings.json
 ```
 
-次のような場所が表示されれば、python.org公式版です。
+これらを削除しても、
+MacにインストールされているPython本体やHomebrewには影響しません。
 
-```bash
-/Library/Frameworks/Python.framework/Versions/3.x/bin/python3
-```
-
-このPythonを使用するように設定します。
-
-```bash
-BASE_PYTHON="/usr/local/bin/python3"
-```
-
-## 5-B. tkinterを確認する
-
-次を実行します。
-
-```bash
-"$BASE_PYTHON" -m tkinter
-```
-
-小さなテストウィンドウが開けば正常です。
-python.org公式版には、通常tkinterが同梱されています。
-
-次のエラーが出る場合は、python.org公式版Pythonを
-同じバージョンのインストーラーで再インストールしてください。
-
-```bash
-ModuleNotFoundError: No module named 'tkinter'
-```
-
-または：
-
-```bash
-ModuleNotFoundError: No module named '_tkinter'
-```
-
-正常なら、「7. XRD Tools専用環境を作る」へ進んでください。
-
-## 共通手順
-
-## 7. 使用するPythonを設定する
-
-Homebrew版を選んだ場合は、次を実行します。
-
-```bash
-BASE_PYTHON="$(brew --prefix)/bin/python3"
-```
-
-python.org公式版を選んだ場合は、次を実行します。
-
-```bash
-BASE_PYTHON="/usr/local/bin/python3"
-```
-
-すでに別の場所にあるPython 3を使う場合は、
-その実体の完全なパスを指定します。
-
-確認します。
-
-```bash
-"$BASE_PYTHON" --version
-"$BASE_PYTHON" -m tkinter
-```
-
-Pythonのバージョンが表示され、
-tkinterのテストウィンドウが開けば使用できます。
-
-## 8. XRD Tools専用環境を作る
-
-Homebrew版Pythonへ直接pip installすると、
-「externally-managed-environment」と表示されることがあります。
-
-これを避け、ほかのPython環境へ影響を与えないため、
-XRD Tools専用の仮想環境（.xrd_tools_venv）を作成します。
-
-以前の専用環境を作り直す場合のみ、先に削除します。
-
-```bash
-rm -rf "$HOME/.xrd_tools_venv"
-```
-
-専用環境を作成します。
-
-```bash
-"$BASE_PYTHON" -m venv "$HOME/.xrd_tools_venv"
-```
-
-専用環境のPythonを確認します。
-
-```bash
-"$HOME/.xrd_tools_venv/bin/python3" --version
-```
-
-専用環境でもtkinterを確認します。
-
-```bash
-"$HOME/.xrd_tools_venv/bin/python3" -m tkinter
-```
-
-テストウィンドウが開けば正常です。
-
-**注意：**
-専用環境はMac全体のPythonを変更しません。
-不要になった場合は「~/.xrd_tools_venv」を削除するだけで元に戻せます。
-
-## 9. 必要なライブラリをインストールする
-
-まず、専用環境内のpipを更新します。
-
-```bash
-"$HOME/.xrd_tools_venv/bin/python3" -m pip install --upgrade pip
-```
-
-次に、必要なライブラリをインストールします。
-
-```bash
-"$HOME/.xrd_tools_venv/bin/python3" -m pip install numpy pandas matplotlib scipy pyperclip pillow
-```
-
-インストールには数分かかる場合があります。
-完了するまでターミナルを閉じないでください。
-
-この方法では「--break-system-packages」は使用しません。
-
-## 10. すべてのライブラリを確認する
-
-次を実行します。
-
-```bash
-"$HOME/.xrd_tools_venv/bin/python3" -c "import tkinter, numpy, pandas, matplotlib, scipy, pyperclip; from PIL import Image; print('XRD Tools setup OK')"
-```
-
-次のように表示されれば準備完了です。
-
-```bash
-XRD Tools setup OK
-```
-
-## 11. XRD Toolsを起動する
-
-1. 配布されたZIPファイルを展開します。
-
-2. 「XRD Tools.app」をダブルクリックします。
-
-3. macOSの警告で開けない場合は、
-```bash
-XRD Tools.appをControlキーを押しながらクリックします。
-```
-
-4. 「開く」を選択します。
-
-5. 確認画面でもう一度「開く」を選択します。
-
-各ツールを起動すると、ターミナルのウィンドウが開く場合があります。
-ツールを使用している間は、そのターミナルを閉じないでください。
-
-XRD Toolsは、次の専用Pythonを自動検出します。
-
-```bash
-~/.xrd_tools_venv/bin/python3
-```
-
-別のPython（例えば古いバージョン3.9など）で開けてしまう場合、
-過去に開いたことのあるPython3で開ける仕様になっているため、
-次を実行します。
-
-```bash
-rm ~/.xrd_tools_launcher_settings.json
-```
-
-再度開け直すと、優先順位の高いPython3を探し直してくれる。
-
-
-## 12. Python 3の選択画面が表示された場合
-
-XRD ToolsがPythonを自動検出できなかった場合は、
-次のPythonを選択してください。
-
-```bash
-~/.xrd_tools_venv/bin/python3
-```
-
-ファイル選択画面でCommand + Shift + Gを押し、
-次の場所を入力します。
-
-```bash
-~/.xrd_tools_venv/bin
-```
-
-表示された「python3」を選択してください。
-
+---
 
 ## 13. 参考
-
-Homebrew公式サイト
-
-<https://brew.sh/>
-
-Homebrewインストール説明
-
-<https://docs.brew.sh/Installation>
-
-Homebrew Pythonパッケージ
-
-<https://formulae.brew.sh/formula/python>
-
-Homebrew tkinterパッケージ
-
-<https://formulae.brew.sh/formula/python-tk>
 
 Python公式 macOSダウンロードページ
 
@@ -470,5 +310,19 @@ Python公式 tkinterドキュメント
 Python公式 venvドキュメント
 
 <https://docs.python.org/3/library/venv.html>
+
+Homebrew公式サイト
+
+<https://brew.sh/>
+
+Homebrew Pythonパッケージ
+
+<https://formulae.brew.sh/formula/python>
+
+Homebrew tkinterパッケージ
+
+<https://formulae.brew.sh/formula/python-tk>
+
+---
 
 以上
