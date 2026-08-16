@@ -1,0 +1,8 @@
+# XRD Tools runtime packages for Python 3.12
+numpy
+pandas
+matplotlib
+scipy
+pyperclip
+Pillow
+openpyxl
